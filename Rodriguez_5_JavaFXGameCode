@@ -1,0 +1,676 @@
+package rodriguez_5_javafxgame;
+
+import java.util.ArrayList;
+import javafx.animation.AnimationTimer;
+import javafx.application.Application;
+import javafx.event.EventHandler;
+import javafx.scene.Group;
+import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.stage.Stage;
+import javafx.scene.text.Text;
+import javafx.event.ActionEvent;
+import javafx.scene.shape.Circle;
+import javafx.event.Event;
+import javafx.scene.Node;
+import javafx.scene.paint.Paint;
+import javafx.util.*;
+import javafx.scene.input.*;
+import javafx.scene.PerspectiveCamera;
+import javafx.scene.text.Font;
+import java.io.FileInputStream;
+import java.io.File;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaView;
+import javafx.scene.text.FontWeight;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import java.util.Random;
+
+/**
+ * For more information see:
+ * http://stackoverflow.com/questions/21331519/how-to-get-smooth-animation-with-keypress-event-in-javafx
+ * http://docs.oracle.com/javafx/2/scenegraph/jfxpub-scenegraph.htm
+ * http://stackoverflow.com/questions/15013913/checking-collision-of-shapes-with-javafx
+ * https://gamedevelopment.tutsplus.com/tutorials/introduction-to-javafx-for-game-development--cms-23835
+ */
+public class Rodriguez_5_JavaFXGame extends Application {
+
+    ArrayList<Rectangle> badblockz = new ArrayList();
+    public ArrayList<Player> playerz = new ArrayList();
+    public ArrayList<Enemy> enemiez = new ArrayList();
+    public ArrayList<Weapon> weaponz = new ArrayList();
+    public ArrayList<Health> punch = new ArrayList();
+    public ArrayList<Platform> platformz = new ArrayList();
+    ArrayList<String> input = new ArrayList<String>();
+    Player p1;
+    Weapon yoyo;
+    Enemy h1, h2, h3, h4, h5, h6, h7, h8, h9, h10, h11;
+    Health d1, d2, d3, d4, d5, d6, d7, d8, d9, d10, d11, d12, d13, d14, d15;
+    Platform pl1, pl2, pl3, pl4, pl5, pl6, pl7, pl8, pl9, pl10, pl11, pl12;
+    Rectangle floor;
+    Canvas canvas;
+    Media media;
+    MediaPlayer beat;
+    Text label = new Text(36, 42, "Health: ");
+
+//    Text text = new Text(45, 42, "text");
+    Group root;
+    ImageView LS, WS;
+    boolean setloss = false;
+    boolean setwin = false;
+
+    @Override
+    public void start(Stage primaryStage) {
+//        media = new Media(new File("src/TheFatRatU.wav").toURI().toString());     
+//        beat = new MediaPlayer(media);
+//        beat.play();
+
+        root = new Group();
+        Scene scene = new Scene(root, 750, 600);
+        primaryStage.setTitle("Game");
+        primaryStage.setScene(scene);
+        primaryStage.show();
+        scene.setRoot(root);
+        PerspectiveCamera camera = new PerspectiveCamera(true);
+        camera.setTranslateZ(-400);
+        camera.setTranslateY(+200);
+        camera.setTranslateX(+600);
+        camera.setNearClip(5);
+        camera.setFarClip(2000.0);
+        camera.setFieldOfView(100);
+        scene.setCamera(camera);
+        canvas = new Canvas(600, 600);
+        GraphicsContext gc = canvas.getGraphicsContext2D();
+        media = new Media(new File("src/TheFatRatU.wav").toURI().toString());
+        beat = new MediaPlayer(media);
+        beat.setVolume(450);
+        beat.play();
+        beat.setOnEndOfMedia(new Runnable() {
+            public void run() {
+                beat.seek(Duration.ZERO);
+                beat.play();
+            }
+        });
+        beat.play();
+        Image start = new Image("file:src/gamestartscreen.jpg");
+        final ImageView SS = new ImageView(start);
+        SS.setY(-300);
+        SS.setFitHeight(1000);
+        SS.setFitWidth(1200);
+        Image lose = new Image("file:src/gamelosescreen.jpg");
+        LS = new ImageView(lose);
+        LS.setY(-300);
+        LS.setFitHeight(1000);
+        LS.setFitWidth(1200);
+        Image win = new Image("file:src/gamewinscreen.jpg");
+        WS = new ImageView(win);
+        WS.setY(-300);
+        WS.setFitHeight(1000);
+        WS.setFitWidth(1200);
+        p1 = new Player(300, 150, 50, 50);
+        p1.setFill(Color.BLUE);
+        playerz.add(p1);
+        h1 = new Enemy(150, 400, 150, 250, 30, 30);
+        h2 = new Enemy(4600, 400, 4800, 300, 30, 30);
+//        h3 = new Enemy(450, 400, 450, 550, 30, 30);
+        h4 = new Enemy(800, 400, 800, 900, 30, 30);
+        h5 = new Enemy(1200, 400, 1200, 1300, 30, 30);
+        h6 = new Enemy(1500, 400, 1500, 1600, 30, 30);
+        h7 = new Enemy(2000, 400, 2000, 2100, 30, 30);
+        h8 = new Enemy(2500, 400, 2500, 2600, 30, 30);
+        h9 = new Enemy(2850, 50, 2850, 3075, 30, 30);
+        h10 = new Enemy(3500, 350, 3500, 3675, 30, 30);
+        h11 = new Enemy(4025, 50, 4025, 4125, 30, 30);
+//        enemiez.add(h1);
+//        enemiez.add(h2);
+//        enemiez.add(h3);
+//        enemiez.add(h4);
+//        enemiez.add(h5);
+//        enemiez.add(h6);
+//        enemiez.add(h7);
+//        enemiez.add(h8);
+//        enemiez.add(h9);
+//        enemiez.add(h10);
+//        enemiez.add(h11);
+        for (Enemy e : enemiez) {
+            e.picture.setX(e.getX());
+            e.picture.setY(e.getY());
+        }
+        yoyo = new Weapon(300, 170, 10, Color.GREENYELLOW);
+        d1 = new Health(375, 450, 25, 25);
+        d2 = new Health(800, 450, 25, 25);
+        d3 = new Health(450, 450, 25, 25);
+        d4 = new Health(1125, 320, 25, 25);
+        d5 = new Health(1450, 450, 25, 25);
+        d6 = new Health(1550, 530, 25, 25);
+        d7 = new Health(2775, 450, 25, 25);
+        d8 = new Health(3000, 350, 25, 25);
+        d9 = new Health(3300, 450, 25, 25);
+        d10 = new Health(3700, 450, 25, 25);
+        d11 = new Health(3800, 450, 25, 25);
+        d12 = new Health(4000, 450, 25, 25);
+        d13 = new Health(4250, 450, 25, 25);
+        d14 = new Health(4400, 450, 25, 25);
+        d15 = new Health(4900, 450, 25, 25);
+//        punch.add(d2);
+//        punch.add(d3);
+//        punch.add(d4);
+//        punch.add(d5);
+//        punch.add(d6);
+//        punch.add(d7);
+//        punch.add(d8);
+//        punch.add(d9);
+//        punch.add(d10);
+//        punch.add(d11);
+//        punch.add(d12);
+//        punch.add(d13);
+//        punch.add(d14);
+//        punch.add(d15);
+//        d1.setFill(Color.RED);
+//        punch.add(d1);
+        pl1 = new Platform(250, 300, 125, 18);
+//        pl1.setFill(Color.BLACK);
+        pl2 = new Platform(600, 400, 125, 18);
+        pl3 = new Platform(1100, 350, 125, 18);
+        pl4 = new Platform(1500, 550, 100, 140);
+        pl5 = new Platform(2000, 250, 125, 18);
+        pl6 = new Platform(2350, 350, 125, 18);
+        pl7 = new Platform(2700, 500, 100, 150);
+        pl8 = new Platform(2950, 400, 125, 18);
+        pl9 = new Platform(3500, 400, 125, 18);
+        pl10 = new Platform(3850, 2500, 125, 18);
+        pl11 = new Platform(4250, 500, 100, 150);
+        pl12 = new Platform(4550, 300, 125, 18);
+        platformz.add(pl1);
+        platformz.add(pl2);
+        platformz.add(pl3);
+        platformz.add(pl4);
+        platformz.add(pl5);
+        platformz.add(pl6);
+        platformz.add(pl7);
+        platformz.add(pl8);
+        platformz.add(pl9);
+        platformz.add(pl10);
+        platformz.add(pl11);
+        platformz.add(pl12);
+        floor = new Rectangle(-1500, 550, 10000, 150);
+        floor.setFill(Color.BLACK);
+        for (int i = 0; i < 600; i += 45) {
+            weaponz.add(new Weapon(i, 400, 7, Color.GREEN));
+
+        }
+
+        AnimationTimer timer = new MyTimer();
+
+        scene.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                MouseButton button = event.getButton();
+                for (Platform pl : platformz) {
+                    if (button == MouseButton.PRIMARY && p1.getBoundsInParent().intersects(pl.getBoundsInParent()) || p1.getBoundsInParent().intersects(floor.getBoundsInParent())) {
+                        p1.moveUp();
+                    }
+                }
+            }
+        });
+
+        scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (event.getCode() == KeyCode.ENTER) {
+//                    BG = true;
+                    root.getChildren().remove(SS);
+                }
+                if (event.getCode() == KeyCode.P) {
+
+                } else if (event.getCode() == KeyCode.RIGHT) {
+                    p1.moveRight();
+
+                    yoyo.setCenterX(yoyo.getCenterX() + 10);
+//                    for (Enemy e : enemiez) {
+//                        checkBounds(p1, yoyo, e);
+//                    }
+                } else if (event.getCode() == KeyCode.LEFT) {
+                    p1.moveLeft();
+                    yoyo.moveLeft();
+//                    for (Enemy e : enemiez) {
+//                        checkBounds(p1, yoyo, e);
+//                    }
+                }
+                if (p1.getX() >= 600) {
+                    label.setX(label.getX() + 10);
+                    camera.setTranslateX(p1.getX() + 1);
+                    label.setFont(Font.font("ARIAL", FontWeight.BOLD, 30));
+                }
+//                if (p1.getX() >= 5500) {
+//                    root.getChildren().add(WS);
+//                }
+            }
+        });
+        label.setFont(Font.font("ARIAL", FontWeight.BOLD, 30));
+        root.getChildren().add(canvas);
+        for (Weapon w : weaponz) {
+            root.getChildren().add(w);
+        }
+//        root.getChildren().addAll(selectedImage);
+        root.getChildren().add(d1);
+        root.getChildren().add(d2);
+        root.getChildren().add(d3);
+        root.getChildren().add(d4);
+        root.getChildren().add(d5);
+        root.getChildren().add(d6);
+        root.getChildren().add(d7);
+        root.getChildren().add(d8);
+        root.getChildren().add(d9);
+        root.getChildren().add(d10);
+        root.getChildren().add(d11);
+        root.getChildren().add(d12);
+        root.getChildren().add(d13);
+        root.getChildren().add(d14);
+        root.getChildren().add(d15);
+        root.getChildren().add(p1);
+        root.getChildren().add(h1);
+        root.getChildren().add(yoyo);
+        root.getChildren().add(pl1);
+        root.getChildren().add(pl2);
+        root.getChildren().add(pl3);
+        root.getChildren().add(pl4);
+        root.getChildren().add(pl5);
+        root.getChildren().add(pl6);
+        root.getChildren().add(pl7);
+        root.getChildren().add(pl8);
+        root.getChildren().add(pl9);
+        root.getChildren().add(pl10);
+        root.getChildren().add(pl11);
+        root.getChildren().add(pl12);
+        root.getChildren().add(floor);
+//        label.relocate(30, 42);
+        root.getChildren().add(label);
+
+        root.getChildren().add(h1.picture);
+        root.getChildren().add(h2.picture);
+//        root.getChildren().add(h3.picture);
+        root.getChildren().add(h4.picture);
+        root.getChildren().add(h5.picture);
+        root.getChildren().add(h6.picture);
+        root.getChildren().add(h7.picture);
+        root.getChildren().add(h8.picture);
+        root.getChildren().add(h9.picture);
+        root.getChildren().add(h10.picture);
+        root.getChildren().add(h11.picture);
+        root.getChildren().add(d1.picture);
+        root.getChildren().add(d2.picture);
+        root.getChildren().add(d3.picture);
+        root.getChildren().add(d4.picture);
+        root.getChildren().add(d5.picture);
+        root.getChildren().add(d6.picture);
+        root.getChildren().add(d7.picture);
+        root.getChildren().add(d8.picture);
+        root.getChildren().add(d9.picture);
+        root.getChildren().add(d10.picture);
+        root.getChildren().add(d11.picture);
+        root.getChildren().add(d12.picture);
+        root.getChildren().add(d13.picture);
+        root.getChildren().add(d14.picture);
+        root.getChildren().add(d15.picture);
+
+        root.getChildren().add(SS);
+
+        timer.start();
+        primaryStage.show();
+    }
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+
+    private class MyTimer extends AnimationTimer {
+
+        boolean movedown = true;
+
+        @Override
+
+        public void handle(long now) {
+            label.setX(p1.getX() + 10);
+            LS.setX(p1.getX() - 600);
+            WS.setX(p1.getX() - 600);
+            System.out.println(p1.health);
+            if (p1.health < 1 && !setloss) {
+                root.getChildren().add(LS);
+                setloss = true;
+            }
+            else if (p1.getX() >= 5500 && setwin == false) {
+                root.getChildren().add(WS);
+                setwin = true;
+            }
+            for (Enemy e : enemiez) {
+                for (Health p : punch) {
+                    checkBounds(p1, yoyo, e, p);
+                    e.moveDown();
+                    e.move();
+                }
+            }
+            p1.moveDown();
+        }
+
+    }
+
+    public void checkBounds(Player box, Weapon yo, Enemy e, Health p) {
+        boolean collisionDetected = false;
+        boolean collisionDetectedWE = false;
+
+        if (box.getBoundsInParent().intersects(e.getBoundsInParent())) {
+            collisionDetected = true;
+        }
+        if (yo.getBoundsInParent().intersects(e.getBoundsInParent())) {
+            collisionDetectedWE = true;
+        }
+        if (collisionDetected && collisionDetectedWE == false) {
+            box.health -= 0.005;
+
+        }
+
+        if (collisionDetectedWE) {
+            e.setOpacity(0);
+
+        }
+
+        boolean collisionDetectedH = false;
+
+        if (box.getBoundsInParent().intersects(p.getBoundsInParent())) {
+            collisionDetectedH = true;
+//            p.pit = false;
+//            p.isIntersecting += 10;
+            p.picture.setOpacity(0);
+            label.setText("Health: " +  Double.toString(p1.health));
+        }
+        if (collisionDetectedH && p.pit) {
+            box.health += 5;
+            p.pit = false;
+
+        }
+
+        boolean collisionDetectedPE = false;
+        boolean canjumpE = false;
+        for (Platform pl : platformz) {
+            if (e.getBoundsInParent().intersects(pl.getBoundsInParent())) {
+                collisionDetectedPE = true;
+            }
+        }
+        if (collisionDetectedPE) {
+            canjumpE = true;
+            e.setY(box.getY() - box.gravity);
+
+        }
+        boolean canjump = false;
+        boolean collisionDetectedP = false;
+        for (Platform pl : platformz) {
+            if (box.getBoundsInParent().intersects(pl.getBoundsInParent())) {
+                collisionDetectedP = true;
+            }
+        }
+        if (collisionDetectedP) {
+            canjump = true;
+            box.setY(box.getY() - box.gravity);
+            yo.setCenterY(yo.getCenterY() - box.gravity);
+        }
+        boolean collisionDetectedW = false;
+
+        for (Weapon w : weaponz) {
+            if (box.getBoundsInParent().intersects(w.getBoundsInParent())) {
+                collisionDetectedW = true;
+                w.setOpacity(0);
+            }
+        }
+        if (collisionDetectedW) {
+            box.inventory += 1;
+
+        }
+    }
+
+    class Player extends Rectangle {
+
+        double gravity = 0.98;
+        public int x, inventory;
+        public double health = 1;
+
+        public Player(double width, double height) {
+            super(width, height);
+        }
+
+        public Player(double x, double y, double width, double height) {
+            super(x, y, width, height);
+
+        }
+
+        void moveLeft() {
+            if (this.getX() < 1) {
+                this.setX(this.getX() + 10);
+            } else {
+                this.setX(this.getX() - 10);
+            }
+        }
+
+        void moveRight() {
+//            if (this.getX() > 6000) {
+//                this.setX(this.getX() - 10);
+//            } else {
+            this.setX(this.getX() + 10);
+//            }
+
+        }
+
+        void moveUp() {
+            if (this.getY() < 1) {
+                this.setY(500);
+                yoyo.setCenterY(500);
+            } else {
+                this.setY(this.getY() - this.gravity * 400.0);
+                yoyo.setCenterY(yoyo.getCenterY() - this.gravity * 400.0);
+            }
+        }
+
+        void moveDown() {
+
+            if (this.getY() < canvas.getHeight() + 300) {
+                if (this.getY() < 500) {
+                    this.setY(this.getY() + this.gravity);
+//               
+                }
+            }
+            if (yoyo.getCenterY() < canvas.getHeight() + 300) {
+                if (yoyo.getCenterY() < 500) {
+                    yoyo.setCenterY(yoyo.getCenterY() + this.gravity);
+//               
+                }
+            }
+        }
+    }
+
+    class Enemy extends Rectangle {
+
+        Random randy = new Random();
+        double gravity = 0.98;
+        int x, y;
+        double low, max;
+        boolean moveLeft, moveRight;
+        Image homework = new Image("file:src/Homework.png");
+        public ImageView picture = new ImageView(homework);
+
+        public Enemy(double width, double height, int low, int max) {
+            super(width, height, low, max);
+            enemiez.add(this);
+            if (randy.nextBoolean()) {
+                System.out.println("wuz true");
+            } else {
+                System.out.println("was false");
+
+            }
+        }
+
+        public Enemy(int x, int y, double low, double max, double width, double height) {
+            super(x, y, width, height);
+            this.setFill(Color.TRANSPARENT);
+            this.picture.setX(this.getX());
+            this.picture.setY(this.getY());
+            this.picture.setFitHeight(this.getHeight());
+            this.picture.setFitWidth(this.getWidth());
+            this.x = x;
+            this.y = y;
+            this.low = low;
+            this.max = max;
+            enemiez.add(this);
+            if (randy.nextBoolean()) {
+                System.out.println("wuz true");
+                this.moveLeft = true;
+                this.moveRight = false;
+            } else {
+                System.out.println("was false");
+                this.moveLeft = false;
+                this.moveRight = true;
+            }
+            this.moveLeft = true;
+            this.moveRight = false;
+        }
+
+        void move() {
+//            boolean maxI = false;
+            if (this.moveRight) {
+                if (this.getX() >= this.max) {
+                    this.setX(this.getX() - 10);
+                    this.moveLeft = true;
+                    this.moveRight = false;
+                } else {
+                    this.setX(this.getX() + 0.1);
+
+                }
+            } else if (this.moveLeft) {
+                if (this.getX() <= this.low) {
+                    this.setX(this.getX() + 10);
+                    this.moveLeft = false;
+                    this.moveRight = true;
+                } else {
+                    this.setX(this.getX() - 0.1);
+                }
+            } else {
+                System.out.println("This should never happen");
+            }
+            this.picture.setX(this.getX());
+            this.picture.setY(this.getY());
+        }
+
+        void moveUp() {
+            if (p1.getY() < this.getY()) {
+                this.setY(this.getY() - this.gravity * 400.0);
+            }
+        }
+
+        void moveDown() {
+
+            if (this.getY() < canvas.getHeight() + 300) {
+                if (this.getY() < 500) {
+                    this.setY(this.getY() + this.gravity);
+//               
+                }
+            }
+        }
+    }
+
+    abstract class inventory {
+
+        int x, y, amount;
+
+        void setX(int a) {
+            this.x = a;
+        }
+
+        void setY(int a) {
+            this.y = a;
+        }
+
+        int getY() {
+            return this.y;
+        }
+
+        int getX() {
+            return this.x;
+        }
+    }
+
+    class Weapon extends Circle {
+
+        int x, y;
+        boolean isIntersecting = false;
+
+        public Weapon(double centerX, double centerY, double radius, Paint fill) {
+            super(centerX, centerY, radius, fill);
+        }
+
+        public Weapon(double centerX, double centerY, double radius) {
+            super(centerX, centerY, radius);
+        }
+
+        void moveLeft() {
+
+            if (this.getCenterX() < 1) {
+                this.setCenterX(this.getCenterX() + 10);
+            } else {
+                this.setCenterX(this.getCenterX() - 10);
+            }
+        }
+//        void moveLeft() {
+//            for (Enemy badblock : enemiez) {
+//                if (this.getBoundsInParent().intersects(badblock.getBoundsInParent())) {
+//
+//                } else {
+//                    this.setCenterX(this.getCenterX() - 1);
+//                }
+//            }
+//        }
+
+    }
+
+    class Health extends Rectangle {
+
+        int x, y;
+        int isIntersecting = 0;
+        Image punchI = new Image("file:src/punch.jpeg");
+        public ImageView picture = new ImageView(punchI);
+        boolean pit = true;
+
+        public Health(double x, double y, double Width, double Height) {
+            super(x, y, Width, Height);
+            punch.add(this);
+            this.setFill(Color.TRANSPARENT);
+            this.picture.setX(this.getX());
+            this.picture.setY(this.getY());
+            this.picture.setFitHeight(30);
+            this.picture.setFitWidth(30);
+
+        }
+    }
+}
+
+class Wall extends Rectangle {
+
+    public Wall(double x, double y, double width, double height) {
+        super(x, y, 20, 20);
+    }
+
+}
+
+class Platform extends Rectangle {
+
+    public Platform(double x, double y, double width, double height) {
+        super(x, y, width, height);
+        //    platformz.add(this);
+    }
+
+}
