@@ -59,8 +59,6 @@ public class Rodriguez_5_JavaFXGame extends Application {
     Media media;
     MediaPlayer beat;
     Text label = new Text(36, 42, "Health: ");
-
-//    Text text = new Text(45, 42, "text");
     Group root;
     ImageView LS, WS;
     boolean setloss = false;
@@ -68,10 +66,6 @@ public class Rodriguez_5_JavaFXGame extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-//        media = new Media(new File("src/TheFatRatU.wav").toURI().toString());     
-//        beat = new MediaPlayer(media);
-//        beat.play();
-
         root = new Group();
         Scene scene = new Scene(root, 750, 600);
         primaryStage.setTitle("Game");
@@ -119,7 +113,6 @@ public class Rodriguez_5_JavaFXGame extends Application {
         playerz.add(p1);
         h1 = new Enemy(150, 400, 150, 250, 30, 30);
         h2 = new Enemy(4600, 400, 4800, 300, 30, 30);
-//        h3 = new Enemy(450, 400, 450, 550, 30, 30);
         h4 = new Enemy(800, 400, 800, 900, 30, 30);
         h5 = new Enemy(1200, 400, 1200, 1300, 30, 30);
         h6 = new Enemy(1500, 400, 1500, 1600, 30, 30);
@@ -128,17 +121,6 @@ public class Rodriguez_5_JavaFXGame extends Application {
         h9 = new Enemy(2850, 50, 2850, 3075, 30, 30);
         h10 = new Enemy(3500, 350, 3500, 3675, 30, 30);
         h11 = new Enemy(4025, 50, 4025, 4125, 30, 30);
-//        enemiez.add(h1);
-//        enemiez.add(h2);
-//        enemiez.add(h3);
-//        enemiez.add(h4);
-//        enemiez.add(h5);
-//        enemiez.add(h6);
-//        enemiez.add(h7);
-//        enemiez.add(h8);
-//        enemiez.add(h9);
-//        enemiez.add(h10);
-//        enemiez.add(h11);
         for (Enemy e : enemiez) {
             e.picture.setX(e.getX());
             e.picture.setY(e.getY());
@@ -159,24 +141,7 @@ public class Rodriguez_5_JavaFXGame extends Application {
         d13 = new Health(4250, 450, 25, 25);
         d14 = new Health(4400, 450, 25, 25);
         d15 = new Health(4900, 450, 25, 25);
-//        punch.add(d2);
-//        punch.add(d3);
-//        punch.add(d4);
-//        punch.add(d5);
-//        punch.add(d6);
-//        punch.add(d7);
-//        punch.add(d8);
-//        punch.add(d9);
-//        punch.add(d10);
-//        punch.add(d11);
-//        punch.add(d12);
-//        punch.add(d13);
-//        punch.add(d14);
-//        punch.add(d15);
-//        d1.setFill(Color.RED);
-//        punch.add(d1);
         pl1 = new Platform(250, 300, 125, 18);
-//        pl1.setFill(Color.BLACK);
         pl2 = new Platform(600, 400, 125, 18);
         pl3 = new Platform(1100, 350, 125, 18);
         pl4 = new Platform(1500, 550, 100, 140);
@@ -188,18 +153,6 @@ public class Rodriguez_5_JavaFXGame extends Application {
         pl10 = new Platform(3850, 2500, 125, 18);
         pl11 = new Platform(4250, 500, 100, 150);
         pl12 = new Platform(4550, 300, 125, 18);
-        platformz.add(pl1);
-        platformz.add(pl2);
-        platformz.add(pl3);
-        platformz.add(pl4);
-        platformz.add(pl5);
-        platformz.add(pl6);
-        platformz.add(pl7);
-        platformz.add(pl8);
-        platformz.add(pl9);
-        platformz.add(pl10);
-        platformz.add(pl11);
-        platformz.add(pl12);
         floor = new Rectangle(-1500, 550, 10000, 150);
         floor.setFill(Color.BLACK);
         for (int i = 0; i < 600; i += 45) {
@@ -225,7 +178,6 @@ public class Rodriguez_5_JavaFXGame extends Application {
             @Override
             public void handle(KeyEvent event) {
                 if (event.getCode() == KeyCode.ENTER) {
-//                    BG = true;
                     root.getChildren().remove(SS);
                 }
                 if (event.getCode() == KeyCode.P) {
@@ -234,32 +186,22 @@ public class Rodriguez_5_JavaFXGame extends Application {
                     p1.moveRight();
 
                     yoyo.setCenterX(yoyo.getCenterX() + 10);
-//                    for (Enemy e : enemiez) {
-//                        checkBounds(p1, yoyo, e);
-//                    }
                 } else if (event.getCode() == KeyCode.LEFT) {
                     p1.moveLeft();
                     yoyo.moveLeft();
-//                    for (Enemy e : enemiez) {
-//                        checkBounds(p1, yoyo, e);
-//                    }
                 }
                 if (p1.getX() >= 600) {
                     label.setX(label.getX() + 10);
                     camera.setTranslateX(p1.getX() + 1);
                     label.setFont(Font.font("ARIAL", FontWeight.BOLD, 30));
                 }
-//                if (p1.getX() >= 5500) {
-//                    root.getChildren().add(WS);
-//                }
             }
         });
         label.setFont(Font.font("ARIAL", FontWeight.BOLD, 30));
         root.getChildren().add(canvas);
-        for (Weapon w : weaponz) {
-            root.getChildren().add(w);
-        }
-//        root.getChildren().addAll(selectedImage);
+//        for (Weapon w : weaponz) {
+//            root.getChildren().add(w);
+//        }
         root.getChildren().add(d1);
         root.getChildren().add(d2);
         root.getChildren().add(d3);
@@ -291,12 +233,9 @@ public class Rodriguez_5_JavaFXGame extends Application {
         root.getChildren().add(pl11);
         root.getChildren().add(pl12);
         root.getChildren().add(floor);
-//        label.relocate(30, 42);
         root.getChildren().add(label);
-
         root.getChildren().add(h1.picture);
         root.getChildren().add(h2.picture);
-//        root.getChildren().add(h3.picture);
         root.getChildren().add(h4.picture);
         root.getChildren().add(h5.picture);
         root.getChildren().add(h6.picture);
@@ -345,8 +284,7 @@ public class Rodriguez_5_JavaFXGame extends Application {
             if (p1.health < 1 && !setloss) {
                 root.getChildren().add(LS);
                 setloss = true;
-            }
-            else if (p1.getX() >= 5500 && setwin == false) {
+            } else if (p1.getX() >= 5500 && setwin == false) {
                 root.getChildren().add(WS);
                 setwin = true;
             }
@@ -386,10 +324,8 @@ public class Rodriguez_5_JavaFXGame extends Application {
 
         if (box.getBoundsInParent().intersects(p.getBoundsInParent())) {
             collisionDetectedH = true;
-//            p.pit = false;
-//            p.isIntersecting += 10;
             p.picture.setOpacity(0);
-            label.setText("Health: " +  Double.toString(p1.health));
+            label.setText("Health: " + Double.toString(p1.health));
         }
         if (collisionDetectedH && p.pit) {
             box.health += 5;
@@ -459,11 +395,7 @@ public class Rodriguez_5_JavaFXGame extends Application {
         }
 
         void moveRight() {
-//            if (this.getX() > 6000) {
-//                this.setX(this.getX() - 10);
-//            } else {
             this.setX(this.getX() + 10);
-//            }
 
         }
 
@@ -482,13 +414,11 @@ public class Rodriguez_5_JavaFXGame extends Application {
             if (this.getY() < canvas.getHeight() + 300) {
                 if (this.getY() < 500) {
                     this.setY(this.getY() + this.gravity);
-//               
                 }
             }
             if (yoyo.getCenterY() < canvas.getHeight() + 300) {
                 if (yoyo.getCenterY() < 500) {
                     yoyo.setCenterY(yoyo.getCenterY() + this.gravity);
-//               
                 }
             }
         }
@@ -541,7 +471,6 @@ public class Rodriguez_5_JavaFXGame extends Application {
         }
 
         void move() {
-//            boolean maxI = false;
             if (this.moveRight) {
                 if (this.getX() >= this.max) {
                     this.setX(this.getX() - 10);
@@ -576,31 +505,9 @@ public class Rodriguez_5_JavaFXGame extends Application {
 
             if (this.getY() < canvas.getHeight() + 300) {
                 if (this.getY() < 500) {
-                    this.setY(this.getY() + this.gravity);
-//               
+                    this.setY(this.getY() + this.gravity);              
                 }
             }
-        }
-    }
-
-    abstract class inventory {
-
-        int x, y, amount;
-
-        void setX(int a) {
-            this.x = a;
-        }
-
-        void setY(int a) {
-            this.y = a;
-        }
-
-        int getY() {
-            return this.y;
-        }
-
-        int getX() {
-            return this.x;
         }
     }
 
@@ -656,21 +563,13 @@ public class Rodriguez_5_JavaFXGame extends Application {
 
         }
     }
-}
 
-class Wall extends Rectangle {
+    class Platform extends Rectangle {
 
-    public Wall(double x, double y, double width, double height) {
-        super(x, y, 20, 20);
+        public Platform(double x, double y, double width, double height) {
+            super(x, y, width, height);
+            platformz.add(this);
+        }
+
     }
-
-}
-
-class Platform extends Rectangle {
-
-    public Platform(double x, double y, double width, double height) {
-        super(x, y, width, height);
-        //    platformz.add(this);
-    }
-
 }
